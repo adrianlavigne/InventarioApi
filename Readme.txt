@@ -8,4 +8,4 @@ Hangfire para crear un acción recurrente en la Web Api. Se ha utilizado la libre
 suscriptores. Por falta de tiempo no se ha creado persistencia para los datos del inventario. Tampoco se ha podido securizar la	
 Api, una buena implementación sería a través de Token JWT. Tampoco se han creado test por falta de tiempo.
 En la vista de Nuevo Producto habría que poner un datepicker en la Fecha de caducidad. He intentado poner el de MaterializeCss
-pero no me ha funcionado a la primera. 
+pero no me ha funcionado a la primera. Faltan validaciones en la clase Producto.

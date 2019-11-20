@@ -6,20 +6,18 @@
 <div class="jumbotron">
     <h1>Lista de Productos</h1>
     <p class="lead">Productos consultados a través de la API.</p>
-    <p>@Html.ActionLink("Nuevo Producto", "NuevoProducto", null, new { @class = "btn btn-primary" })</p>
+    <p>@Html.ActionLink("Nuevo Producto", "NuevoProducto", null, new { @class = "btn blue" })</p>
 </div>
 
 <div class="row">
-    <table class="table striped responsive-table">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Nombre Producto</th>
-                <th>Tipo</th>
-                <th class="text-center">Fecha de Caducidad</th>
-                <th class="text-center">Acciones</th>
-            </tr>
-        </thead>
+    <table class="table striped">
+        <tr>
+            <th>Número</th>
+            <th>Nombre Producto</th>
+            <th>Tipo</th>
+            <th class="text-center">Fecha de Caducidad</th>
+            <th class="text-center">Acciones</th>
+        </tr>
         @{foreach (var item in Model)
             {
                 <tr>
@@ -27,7 +25,7 @@
                     <td>@item.Nombre</td>
                     <td>@item.Tipo</td>
                     <td class="text-center">@item.FechaCaducidad.ToShortDateString()</td>
-                    <td class="text-center">@Html.ActionLink("Sacar Producto", "SacarProducto", new { nombre = item.Nombre }, new { @class = "btn btn-danger" })</td>
+                    <td class="text-center">@Html.ActionLink("Sacar Producto", "SacarProducto", new { nombre = item.Nombre }, new { @class = "btn red" })</td>
                 </tr>
             }
         }

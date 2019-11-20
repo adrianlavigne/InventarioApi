@@ -71,6 +71,7 @@ namespace PruebaAPIWeb.Controllers
         public ActionResult NuevoProducto()
         {
             var model = new Producto();
+            model.FechaCaducidad = DateTime.Today.AddMonths(2);
             return View(model);
         }
 

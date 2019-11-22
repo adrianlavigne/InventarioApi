@@ -5,50 +5,60 @@
 
 @using (Html.BeginForm("NuevoProducto", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <div class="jumbotron">
-        <h1>Nuevo Producto</h1>
-        <p class="lead">Nuevo producto para el inventario.</p>
+
+    <div class="section no-pad-bot blue lighten-5" id="index-banner">
+        <br><br>
+        <h1 class="header center  blue-text text-darken-3">Nuevo Producto</h1>
+        <div class="row center">
+            <h5 class="header col s12 light">Nuevo producto para el inventario.</h5>
+        </div>
+        <br><br>
     </div>
-    <div class="well col-xs-12">
-        <div class="form-group">
-            <div class="col-xs-4">
-                @Html.LabelFor(m => m.Id)
-            </div>
-            <div class="col-xs-8">
-                @Html.TextBoxFor(m => m.Id, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Id)
-            </div>
+    <div class="row">
+        <div class="input-field col s6">
+            @Html.TextBoxFor(m => m.Id, new { @class = "validate" })
+            @Html.LabelFor(m => m.Id)
+            @Html.ValidationMessageFor(m => m.Id)
         </div>
-        <div class="form-group">
-            <div class="col-xs-4">
-                @Html.LabelFor(m => m.Nombre)
-            </div>
-            <div class="col-xs-8">
-                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Nombre)
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-4">
-                @Html.LabelFor(m => m.Tipo)
-            </div>
-            <div class="col-xs-8">
-                @Html.TextBoxFor(m => m.Tipo, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Tipo)
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-xs-4">
-                @Html.LabelFor(m => m.FechaCaducidad)
-            </div>
-            <div class="col-xs-8">
-                @Html.EditorFor(m => m.FechaCaducidad, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.FechaCaducidad)
-            </div>
+        <div class="input-field col s6">
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "validate" })
+            @Html.LabelFor(m => m.Nombre)
+            @Html.ValidationMessageFor(m => m.Nombre)
         </div>
     </div>
-    <div class="form-group">
+    <div class="row">
+        <div class="input-field col s6">
+            @Html.TextBoxFor(m => m.Tipo, new { @class = "validate" })
+            @Html.LabelFor(m => m.Tipo)
+            @Html.ValidationMessageFor(m => m.Tipo)
+        </div>
+        <div class="input-field col s6">
+            @Html.TextBoxFor(m => m.FechaCaducidad, new { @class = "datepicker" })
+            @Html.LabelFor(m => m.FechaCaducidad)
+            @Html.ValidationMessageFor(m => m.FechaCaducidad)
+        </div>
+    </div>
+    <div class="row">
         <input type="submit" value="Guardar" class="btn" />
     </div>
 }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, {
+            monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+            selectMonths: true,
+            selectYears: 100, // Puedes cambiarlo para mostrar más o menos años
+            today: 'Hoy',
+            clear: 'Limpiar',
+            close: 'Ok',
+            labelMonthNext: 'Siguiente mes',
+            labelMonthPrev: 'Mes anterior',
+            labelMonthSelect: 'Selecciona un mes',
+            labelYearSelect: 'Selecciona un año',});
+    });
+</script>
 

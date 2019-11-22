@@ -1,34 +1,34 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Listado</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
+    <enviroments include="Develoment">
+        <link rel="stylesheet" href="~/Content/materialize/css/materialize.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </enviroments>
+
+    <enviroments exclude="Develoment">
+        <link rel="stylesheet" href="~/Content/materialize/css/materialize.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </enviroments>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Inventario", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <nav>
+        <div class="nav-wrapper">
+            <div class="container">
+                <a href="#" class="brand-logo center">INVENTARIO</a>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="@Url.Action("Index","Home")">Listado</a></li>
+                </ul>
             </div>
-            @*<div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
-                    </ul>
-                </div>*@
         </div>
-    </div>
-    <div class="container body-content">
+    </nav>
+
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>
@@ -36,10 +36,16 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/materialize")
+    <enviroment include="Development">
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/materialize/materialize.js"></script>
+    </enviroment>
+
+    <enviroment exclude="Development">
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/materialize/materialize.js"></script>
+    </enviroment>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -3,10 +3,16 @@
     ViewBag.Title = "Gestión de Inventario";
 }
 
-<div class="jumbotron">
-    <h1>Lista de Productos</h1>
-    <p class="lead">Productos consultados a través de la API.</p>
-    <p>@Html.ActionLink("Nuevo Producto", "NuevoProducto", null, new { @class = "btn blue" })</p>
+<div class="section no-pad-bot blue lighten-5" id="index-banner">
+    <br><br>
+        <h1 class="header center  blue-text text-darken-3">Lista de Productos</h1>
+    <div class="row center">
+        <h5 class="header col s12 light">Productos consultados a través de la API.</h5>
+    </div>
+    <div class="row center">
+        @Html.ActionLink("Añadir Producto", "NuevoProducto", null, new { @class = "btn blue" })
+    </div>
+    <br><br>
 </div>
 
 <div class="row">

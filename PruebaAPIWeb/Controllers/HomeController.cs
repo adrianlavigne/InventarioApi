@@ -10,104 +10,72 @@ namespace PruebaAPIWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private List<Producto> productos;
-
+        private static HttpClient _client { get; set; }
         public ActionResult Index()
         {
-            if (Session["Productos"] == null)
-            {
-                productos = GetModelFromAPI();
-                Session["Productos"] = productos;
-            }
-            else
-                productos = (List<Producto>)Session["Productos"];
+            InitializeHttpClient();
+            List<Producto> result = GetProductsFromAPI();
 
-            return View(productos.Where(p => p.Disponibilidad).ToList());
+            return View(result.Where(p => p.Disponibilidad).ToList());
         }
 
-        private List<Producto> GetModelFromAPI()
+        private static List<Producto> GetProductsFromAPI()
         {
-            using (var client = new HttpClient())
+            List<Producto> result = new List<Producto>();
+
+            // Hace la llamada 
+            var response = _client.GetAsync("producto");
+            response.Wait();
+
+            // Si el servicio responde correctamente
+            if (response.Result.IsSuccessStatusCode)
             {
-                InitializeHttpClient(client);
-
-                // Hace la llamada 
-                var response = client.GetAsync("producto");
-                response.Wait();
-
-                // Si el servicio responde correctamente
-                if (response.Result.IsSuccessStatusCode)
-                {
-                    // Lee el response y lo deserializa como una lista de Producto
-                    var dataObjects = response.Result.Content.ReadAsAsync<List<Producto>>();
-                    return dataObjects.Result;
-                }
-                // Sino devuelve lista vacía
-                return new List<Producto>();
+                // Lee el response y lo deserializa como una lista de Producto
+                var dataObjects = response.Result.Content.ReadAsAsync<List<Producto>>();
+                result = dataObjects.Result;
             }
+
+            return result;
         }
 
-        private static void InitializeHttpClient(HttpClient client)
+        private static void InitializeHttpClient()
         {
-            client.BaseAddress = new Uri("http://localhost:50777/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
+            _client = new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:50777/api/")
+            };
+            _client.DefaultRequestHeaders.Accept.Clear();
             // Agrega el header Accept: application/json para recibir la data como json  
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        private bool PostProducto(Producto producto)
-        {
-            using (var client = new HttpClient())
-            {
-                InitializeHttpClient(client);
-
-                var response = client.PostAsJsonAsync<Producto>("producto", producto);
-                response.Wait();
-
-                return response.Result.IsSuccessStatusCode;
-            }
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public ActionResult NuevoProducto()
         {
             var model = new Producto();
-            model.FechaCaducidad = DateTime.Today.AddMonths(2);
             return View(model);
         }
 
         [HttpPost]
         public ActionResult NuevoProducto(Producto producto)
         {
-            productos = (List<Producto>)Session["Productos"];
-            if (PostProducto(producto))
-                productos.Add(producto);
+            var response = _client.PostAsJsonAsync<Producto>("producto", producto);
+            response.Wait();
 
-            return View("Index", productos.Where(p => p.Disponibilidad).ToList());
-        }
+            if (!response.Result.IsSuccessStatusCode)
+                Console.WriteLine(string.Format("No se ha podido agregar el producto {0} al inventario.", producto.Nombre));
 
-        private bool PutProductoPorNombre(string nombre)
-        {
-            using (var client = new HttpClient())
-            {
-                InitializeHttpClient(client);
-
-                var response = client.PutAsJsonAsync<string>("producto", nombre);
-                response.Wait();
-
-                return response.Result.IsSuccessStatusCode;
-            }
+            return View("Index", GetProductsFromAPI());
         }
 
         public ActionResult SacarProducto(string nombre)
         {
-            productos = (List<Producto>)Session["Productos"];
-            if (PutProductoPorNombre(nombre))
-            {
-                var producto = productos.Find(p => p.Nombre == nombre);
-                if (producto != null) producto.Disponibilidad = false;
-            }
-                
-            return View("Index", productos.Where(p => p.Disponibilidad).ToList());
+            var response = _client.PutAsJsonAsync<string>("producto", nombre);
+            response.Wait();
+
+            if (!response.Result.IsSuccessStatusCode)
+                Console.WriteLine(string.Format("No se ha podido sacar el producto {0} del inventario.", nombre));
+
+            return View("Index", GetProductsFromAPI());
         }
     }
 }

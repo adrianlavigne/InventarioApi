@@ -1,19 +1,17 @@
-﻿using Hangfire;
-using Hangfire.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using WebApiGestorInventario.Helpers;
+using WebApiGestorInventario.Eventos;
 using WebApiGestorInventario.Models;
 
 namespace WebApiGestorInventario.Controllers
 {
-    
+
     public class ProductoController : ApiController
     {
+        private IList<Producto> _productos { get; set; }
 
         public IList<Producto> Productos
         {
@@ -23,29 +21,29 @@ namespace WebApiGestorInventario.Controllers
         //Simulación de lectura de BD
         private IList<Producto> GetProductos()
         {
-            var result = new List<Producto>();
-            for (int i = 0; i < 20; i++)
+            if (_productos == null)
             {
-                Producto producto = new Producto()
+                _productos = new List<Producto>();
+                for (int i = 1; i <= 20; i++)
                 {
-                    Id = i,
-                    Nombre = "Producto" + i,
-                    Tipo = "Tipo" + i % 5,
-                    FechaCaducidad = DateTime.Today.AddDays(60),
-                    Disponibilidad = true
-                };
-                result.Add(producto);
+                    Producto producto = new Producto()
+                    {
+                        Id = i,
+                        Nombre = "Producto" + i,
+                        Tipo = "Tipo" + i % 5,
+                        FechaCaducidad = DateTime.Today.AddDays(60),
+                        Disponibilidad = true
+                    };
+                    _productos.Add(producto);
+                }
             }
 
-            return result;
+            return _productos;
         }
 
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-
-            var manager = new RecurringJobManager();
-            manager.AddOrUpdate("CheckProductsObsolete", Job.FromExpression(() => CheckProductsObsolete()), Cron.Daily());
         }
 
         [HttpPatch]
@@ -53,7 +51,10 @@ namespace WebApiGestorInventario.Controllers
         {
             foreach (var producto in Productos)
                 if (producto.FechaCaducidad > DateTime.Today)
-                    NotificationHelper.Notificar(string.Format("El elemento {0} ha caducado", producto.Nombre));
+                {
+                    var caducarElemento = new CaducarElemento();
+                    caducarElemento.VerificarElemento(producto);
+                }
         }
 
         // GET: api/Producto
@@ -74,7 +75,9 @@ namespace WebApiGestorInventario.Controllers
         [HttpPost]
         public void Post([FromBody]Producto producto)
         {
-            Productos.Add(producto);
+            if (_productos == null)
+                _productos = new List<Producto>();
+            _productos.Add(producto);
         }
 
         // PUT: api/Producto
@@ -85,7 +88,8 @@ namespace WebApiGestorInventario.Controllers
             if (elementoABorrar != null)
             {
                 elementoABorrar.Disponibilidad = false;
-                NotificationHelper.Notificar(string.Format("El elemento {0} se ha sacado del inventario.", elementoABorrar.Nombre));
+                var sacarElemento = new SacarElemento();
+                sacarElemento.SacarDelInventario(elementoABorrar);
             }
         }
     }

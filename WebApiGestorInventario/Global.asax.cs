@@ -1,5 +1,4 @@
-﻿using Hangfire;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Owin;
 using System.Web;
 
@@ -18,10 +17,6 @@ namespace WebApiGestorInventario
     {
         public void Configuration(IAppBuilder app)
         {
-            Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage("DefaultConnection");
-
-            app.UseHangfireDashboard();
-            app.UseHangfireServer();
 
         }
     }

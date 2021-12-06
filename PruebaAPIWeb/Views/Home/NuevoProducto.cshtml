@@ -45,7 +45,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('.datepicker');
-        var instances = M.Datepicker.init(elems, {
+        var instances = M.Datepicker.init(elems, {});
+        instances.pickadate({
             monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
@@ -58,7 +59,8 @@
             labelMonthNext: 'Siguiente mes',
             labelMonthPrev: 'Mes anterior',
             labelMonthSelect: 'Selecciona un mes',
-            labelYearSelect: 'Selecciona un año',});
+            labelYearSelect: 'Selecciona un año',
+        });
     });
 </script>
 

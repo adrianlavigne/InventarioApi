@@ -38,6 +38,25 @@ namespace PruebaAPIWeb.Controllers
             return result;
         }
 
+        private static IEnumerable<Categoria> GetCategoriasFromAPI()
+        {
+            IEnumerable<Categoria> result = new List<Categoria>();
+
+            // Hace la llamada 
+            var response = _client.GetAsync("categoria");
+            response.Wait();
+
+            // Si el servicio responde correctamente
+            if (response.Result.IsSuccessStatusCode)
+            {
+                // Lee el response y lo deserializa como una lista de Producto
+                var dataObjects = response.Result.Content.ReadAsAsync<List<Categoria>>();
+                result = dataObjects.Result;
+            }
+
+            return result;
+        }
+
         private static void InitializeHttpClient()
         {
             _client = new HttpClient
@@ -52,13 +71,14 @@ namespace PruebaAPIWeb.Controllers
         public ActionResult NuevoProducto()
         {
             var model = new Producto();
+            ViewBag.Categorias = new SelectList(GetCategoriasFromAPI(), "Id", "Nombre");
             return View(model);
         }
 
         [HttpPost]
         public ActionResult NuevoProducto(Producto producto)
         {
-            var response = _client.PostAsJsonAsync<Producto>("producto", producto);
+            var response = _client.PostAsJsonAsync<Producto>("producto/", producto);
             response.Wait();
 
             if (!response.Result.IsSuccessStatusCode)

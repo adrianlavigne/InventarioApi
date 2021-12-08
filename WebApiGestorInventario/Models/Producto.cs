@@ -6,9 +6,11 @@ namespace WebApiGestorInventario.Models
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
-        public string Tipo { get; set; }
+        public int CategoriaId { get; set; }
         public DateTime FechaCaducidad { get; set; }
         public bool Disponibilidad { get; set; }
+
+        public virtual Categoria Categoria { get; set; }
 
         public Producto()
         {

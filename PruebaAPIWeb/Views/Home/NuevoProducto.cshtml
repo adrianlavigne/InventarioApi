@@ -28,9 +28,7 @@
     </div>
     <div class="row">
         <div class="input-field col s6">
-            @Html.TextBoxFor(m => m.Tipo, new { @class = "validate" })
-            @Html.LabelFor(m => m.Tipo)
-            @Html.ValidationMessageFor(m => m.Tipo)
+            @Html.DropDownList("CategoriaId", (SelectList)ViewBag.Categorias, "Selecciona Categoría", new { @class = "browser-default" })
         </div>
         <div class="input-field col s6">
             @Html.TextBoxFor(m => m.FechaCaducidad, new { @class = "datepicker" })
